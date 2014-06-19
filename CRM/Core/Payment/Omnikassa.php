@@ -104,25 +104,27 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
 
     $component = strtolower($component);
 
-
+    $pp_id=0;
     if ($component == 'event') {
 //      $baseURL = 'civicrm/event/register';
+      $pp_id=$params['payment_processor'];
       $returnURL = CRM_Utils_System::url($baseURL,array(
         'md' => $component,
         'qfKey' => $params['qfKey'],
-        'processor_id' => $params['payment_processor_id'],
+        'processor_id' => $pp_id,
         'mode' => $this->_mode,
-        'participantId' => $orderID[4],
+        'participantId' => $params['participantID'],
        ),
        TRUE, NULL, FALSE
       );
     }
     elseif ($component == 'contribute') {
 //      $baseURL = 'civicrm/contribute/transact';
+      $pp_id=$params['payment_processor_id'];
       $returnURL = CRM_Utils_System::url($baseURL,array(
         'md' => $component,
         'qfKey' => $params['qfKey'],
-        'processor_id' => $params['payment_processor_id'],
+        'processor_id' => $pp_id,
         'mode' => $this->_mode,
        ),
        TRUE, NULL, FALSE
@@ -130,7 +132,7 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
     }
 
     $notificationUrl = CRM_Utils_System::url($baseURL, array(
-       'processor_id' => $params['payment_processor_id'],
+       'processor_id' => $pp_id,
        'mode' => $this->_mode,
        ), TRUE, NULL, FALSE
     );
