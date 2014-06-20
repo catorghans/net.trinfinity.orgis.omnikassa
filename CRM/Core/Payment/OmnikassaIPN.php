@@ -181,7 +181,7 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
       switch ($module) {
         case 'contribute':
           if ($success){
-            CRM_Core_Session::setStatus('', ts('Thank You'), 'success');
+//            CRM_Core_Session::setStatus('', ts('Thank You'), 'success');
             $url = CRM_Utils_System::url('civicrm/contribute/transact', "_qf_ThankYou_display=true&qfKey={$qfKey}", FALSE, NULL, FALSE
             );
 
@@ -197,7 +197,7 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
           break;
         case 'event':
           if ($success){
-            CRM_Core_Session::setStatus('', ts('Thank You'), 'success'); 
+  //          CRM_Core_Session::setStatus('', ts('Thank You'), 'success'); 
             $url = CRM_Utils_System::url('civicrm/event/register', "_qf_ThankYou_display=true&qfKey={$qfKey}", FALSE, NULL, FALSE
             );
           }
