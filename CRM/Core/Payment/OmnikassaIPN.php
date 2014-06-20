@@ -181,12 +181,14 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
       switch ($module) {
         case 'contribute':
           if ($success){
-            $url = CRM_Utils_System::url('civicrm/contribute/transact', "_qf_ThankYou_display=1&qfKey={$qfKey}", FALSE, NULL, FALSE
+            CRM_Core_Session::setStatus('', ts('Thank You'), 'success');
+            $url = CRM_Utils_System::url('civicrm/contribute/transact', "_qf_ThankYou_display=true&qfKey={$qfKey}", FALSE, NULL, FALSE
             );
+
           }
           else {
             $error=$this->_paymentProcessor->getErrorDescription($resultCode);
-            CRM_Core_Session::setStatus($error, ts('Error:'), 'error');
+            CRM_Core_Session::setStatus($error, ts('Error'), 'error');
             $url = CRM_Utils_System::url('civicrm/contribute/transact', "_qf_Confirm_display=true&qfKey={$qfKey}", FALSE, NULL, FALSE
             );
 
@@ -195,15 +197,15 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
           break;
         case 'event':
           if ($success){
- 
-            $url = CRM_Utils_System::url('civicrm/event/register', "_qf_ThankYou_display=1&qfKey={$qfKey}", FALSE, NULL, FALSE
+            CRM_Core_Session::setStatus('', ts('Thank You'), 'success'); 
+            $url = CRM_Utils_System::url('civicrm/event/register', "_qf_ThankYou_display=true&qfKey={$qfKey}", FALSE, NULL, FALSE
             );
           }
           else
           {
             $error=$this->_paymentProcessor->getErrorDescription($resultCode);
 
-            CRM_Core_Session::setStatus($error, ts('Error:'), 'error');
+            CRM_Core_Session::setStatus($error, ts('Error'), 'error');
             $url = CRM_Utils_System::url('civicrm/event/register', "_qf_Confirm_display=true&qfKey={$qfKey}", FALSE, NULL, FALSE
           );
 

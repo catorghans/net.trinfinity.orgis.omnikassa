@@ -169,16 +169,17 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
 ?>
 <html>
 <body>
+<p><?php print(ts('Please Click the pay now button if you are not automatically redirected'));?></p>
 <form method="POST" name="omnikassa" action="<?php echo $action_url ; ?>" id="parameters">
 <?php
           foreach($OmnikassaParams as $key => $val){
             echo '<input name="'.$key.'" type="hidden" value="'.$val.'" />';
           }
       ?>
-      <input type="submit">
+      <input type="submit" value="<?php print(ts('Pay Now'))?>">
 </form>
 <script type="text/javascript">
-document.forms['omnikassa'].submit();
+//document.forms['omnikassa'].submit();
 </script>
 <?php
    
