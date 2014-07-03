@@ -150,28 +150,47 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
 
     $resultCode = $this->retrieveData("responseCode", "String");
     $trxn_id = $this->retrieveData("transactionReference", "String");
+
     $contributionID = $this->retrieveData("orderId", "Integer");
+    $contribution = new CRM_Contribute_BAO_Contribution();
+    $contribution->id = $contributionID;
+    $contribution->find(TRUE);
+    if(!$contribution->id == $contributionID){
+      throw new Exception('A valid contribution ID is required', 'invalid_data');
+    }
+
+    $first = true;
+
+    if ($contribution->contribution_status_id == 1){
+      CRM_Core_Error::debug_log_message( "Omnikassa, contribution already been handled:") ;
+      $first = false;
+    }
+
     $success=false;
 
     if ($resultCode == "00")
     {
-      CRM_Core_Error::debug_log_message( "Omnikassa IPN main() function: RESULT OK" );
-
-      civicrm_api3('contribution', 'completetransaction', array(
-        'id' => $contributionID,
-        'trxn_id' => $trxn_id,
-      ));
-  //    $this->omnikassa_receipt_exit(TRUE);
       $success=true;
+
+      if ($first){
+        CRM_Core_Error::debug_log_message( "Omnikassa IPN main() function: RESULT OK" );
+
+        civicrm_api3('contribution', 'completetransaction', array(
+          'id' => $contributionID,
+          'trxn_id' => $trxn_id,
+        ));
+      }
+  //    $this->omnikassa_receipt_exit(TRUE);
 
     }
     else
     {
-      CRM_Core_Error::debug_log_message( "Omnikassa IPN main() function: RESULT FAILED:".$resultCode) ;
+      if ($first) {
+        CRM_Core_Error::debug_log_message( "Omnikassa IPN main() function: RESULT FAILED:".$resultCode) ;
 
-      $this->processFailedTransaction($contributionID);
+        $this->processFailedTransaction($contribution);
  //     $this->omnikassa_receipt_exit(TRUE);
-
+      }
     }
    
     if (isset($_REQUEST["md"]) && isset($_REQUEST["qfKey"])){
@@ -227,15 +246,9 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
 * here - this is a copy & paste of the completetransaction api
 * @param unknown $contributionID
 */
-  function processFailedTransaction($contributionID) {
+  function processFailedTransaction($contribution) {
 
     $input = $ids = array();
-    $contribution = new CRM_Contribute_BAO_Contribution();
-    $contribution->id = $contributionID;
-    $contribution->find(TRUE);
-    if(!$contribution->id == $contributionID){
-      throw new Exception('A valid contribution ID is required', 'invalid_data');
-    }
     try {
 
       if(!$contribution->loadRelatedObjects($input, $ids, FALSE, TRUE)){
