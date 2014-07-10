@@ -179,7 +179,7 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
       <input type="submit" value="<?php print(ts('Pay Now'))?>">
 </form>
 <script type="text/javascript">
-//document.forms['omnikassa'].submit();
+  document.forms['omnikassa'].submit();
 </script>
 <?php
    
