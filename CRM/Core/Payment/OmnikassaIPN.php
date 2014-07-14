@@ -107,7 +107,6 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
             $return[$key] = $value;
         }
 
-//        $this->log("info", $logtxt . ", " . ($return['responseCode']=='00' ? "SUCCESS" : "FAIL") . ", order " . $return['transactionReference'] . ", payment type " .$
         $this->_omnikassaData = $return;
      }
      $value = CRM_Utils_Type::validate(
@@ -139,7 +138,6 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
     $paymentProcessor = civicrm_api3('payment_processor', 'getsingle', array('id' => $this->retrieve('processor_id', 'Integer', TRUE)));
     //we say contribute here as a dummy param as we are using the api to complete & we don't need to know
     $this->_paymentProcessor = new CRM_Core_Payment_Omnikassa('contribute', $paymentProcessor);
-
 
     if(!$this->omnikassa_validate_response()) {
       $this->omnikassa_receipt_exit(FALSE);
@@ -180,8 +178,6 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
           'trxn_id' => $trxn_id,
         ));
       }
-  //    $this->omnikassa_receipt_exit(TRUE);
-
     }
     else
     {
@@ -189,7 +185,6 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
         CRM_Core_Error::debug_log_message( "Omnikassa IPN main() function: RESULT FAILED:".$resultCode) ;
 
         $this->processFailedTransaction($contribution);
- //     $this->omnikassa_receipt_exit(TRUE);
       }
     }
    
@@ -200,7 +195,6 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
       switch ($module) {
         case 'contribute':
           if ($success){
-//            CRM_Core_Session::setStatus('', ts('Thank You'), 'success');
             $url = CRM_Utils_System::url('civicrm/contribute/transact', "_qf_ThankYou_display=true&qfKey={$qfKey}", FALSE, NULL, FALSE
             );
 
@@ -216,9 +210,14 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
           break;
         case 'event':
           if ($success){
-  //          CRM_Core_Session::setStatus('', ts('Thank You'), 'success'); 
-            $url = CRM_Utils_System::url('civicrm/event/register', "_qf_ThankYou_display=true&qfKey={$qfKey}", FALSE, NULL, FALSE
+            $url = CRM_Utils_System::url('civicrm/event/register', array(
+                 '_qf_ThankYou_display' => 1,
+                 'qfKey' => $qfKey
+                ),
+                TRUE, NULL, FALSE
             );
+
+
           }
           else
           {
@@ -233,6 +232,8 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
           break;
 
      }
+        CRM_Core_Error::debug_log_message( "Omnikassa Redirect to".$url) ;
+
         CRM_Utils_System::redirect($url);     
 
 

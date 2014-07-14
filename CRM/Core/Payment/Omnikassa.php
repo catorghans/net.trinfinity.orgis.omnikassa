@@ -117,6 +117,16 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
        ),
        TRUE, NULL, FALSE
       );
+
+/*** Direct Success URL
+      $returnURL = CRM_Utils_System::url('civicrm/event/register', array(
+                 '_qf_ThankYou_display' => 1,
+                 'qfKey' => $params['qfKey'],
+                ),
+                TRUE, NULL, FALSE
+            );
+*/
+
     }
     elseif ($component == 'contribute') {
 //      $baseURL = 'civicrm/contribute/transact';
@@ -139,7 +149,7 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
    
     $config = CRM_Core_Config::singleton();
     CRM_Core_Error::debug_log_message( "Omnikassa mode='".$this->_mode."' Params array ".print_r($params,true) );
-    CRM_Core_Error::debug_log_message( "Omnikassa config array ".print_r($config,true) );
+//    CRM_Core_Error::debug_log_message( "Omnikassa config array ".print_r($config,true) );
 
     list($currencynumber, $fraction_unit) = $this->getCurrency($params['currencyID']);    
  
@@ -147,7 +157,7 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
     // Build our query string;
     $Omniparams = array();
     $Omniparams['orderId'] =  $params['contributionID'];
-    $Omniparams['transactionReference'] =  $params['invoiceID'];
+    $Omniparams['transactionReference'] =  substr(time().$params['invoiceID'],0,32);
     $Omniparams['amount'] = $params['amount']*$fraction_unit;
     $Omniparams['merchantId']= $this->_paymentProcessor['user_name'];
     $Omniparams['keyVersion']=1;
@@ -184,8 +194,8 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
 <?php
    
   //      echo "Redirecting... please wait";
-  //      require_once 'CRM/Core/Session.php';
-  //      CRM_Core_Session::storeSessionObjects( );
+        require_once 'CRM/Core/Session.php';
+        CRM_Core_Session::storeSessionObjects( );
         exit;
   }
 
