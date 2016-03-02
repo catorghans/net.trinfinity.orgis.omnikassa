@@ -160,7 +160,7 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
     $Omniparams['transactionReference'] =  substr(time().$params['invoiceID'],0,32);
     $Omniparams['amount'] = $params['amount']*$fraction_unit;
     $Omniparams['merchantId']= $this->_paymentProcessor['user_name'];
-    $Omniparams['keyVersion']=1;
+    $Omniparams['keyVersion']=$this->_paymentProcessor['signature'];
     $Omniparams['customerLanguage']=$this->getLanguage();
     $Omniparams['currencyCode']=$currencynumber;
     $Omniparams['normalReturnUrl']=$returnURL;
