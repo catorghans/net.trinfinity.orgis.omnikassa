@@ -66,7 +66,7 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
     if (!isset($fields['Data']) || empty($fields['Seal'])) {
       return FALSE;
     }
-    $p = $this->_paymentProcessor;
+    $p = self::$_paymentProcessor;
     $validate = $p->data_validate($fields['Data'], $fields['Seal']);
   
     if (!$validate) return false;
@@ -137,7 +137,7 @@ class CRM_Core_Payment_OmnikassaIPN extends CRM_Core_Payment_BaseIPN{
     CRM_Core_Error::debug_log_message( "Omnikassa IPN main() function".print_r($_REQUEST,true) );
     $paymentProcessor = civicrm_api3('payment_processor', 'getsingle', array('id' => $this->retrieve('processor_id', 'Integer', TRUE)));
     //we say contribute here as a dummy param as we are using the api to complete & we don't need to know
-    $this->_paymentProcessor = new CRM_Core_Payment_Omnikassa('contribute', $paymentProcessor);
+    self::$_paymentProcessor = new CRM_Core_Payment_Omnikassa('contribute', $paymentProcessor);
 
     if(!$this->omnikassa_validate_response()) {
       $this->omnikassa_receipt_exit(FALSE);
