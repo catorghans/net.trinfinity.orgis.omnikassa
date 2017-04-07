@@ -107,7 +107,11 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
     $pp_id=0;
     if ($component == 'event') {
 //      $baseURL = 'civicrm/event/register';
-      $pp_id=$params['payment_processor'];
+      if (isset($params['payment_processor_id']) && !empty($params['payment_processor_id'])) {
+        $pp_id = $params['payment_processor_id']
+      } else {
+        $pp_id=$params['payment_processor'];
+      }
       $returnURL = CRM_Utils_System::url($baseURL,array(
         'md' => $component,
         'qfKey' => $params['qfKey'],
@@ -146,13 +150,13 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
        'mode' => $this->_mode,
        ), TRUE, NULL, FALSE
     );
-   
+
     $config = CRM_Core_Config::singleton();
     CRM_Core_Error::debug_log_message( "Omnikassa mode='".$this->_mode."' Params array ".print_r($params,true) );
 //    CRM_Core_Error::debug_log_message( "Omnikassa config array ".print_r($config,true) );
 
-    list($currencynumber, $fraction_unit) = $this->getCurrency($params['currencyID']);    
- 
+    list($currencynumber, $fraction_unit) = $this->getCurrency($params['currencyID']);
+
     $action_url = $this->_paymentProcessor['url_site'];
     // Build our query string;
     $Omniparams = array();
@@ -171,7 +175,7 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
     CRM_Utils_Hook::alterPaymentProcessorParams($this, $params, $OmniParams);
 
     $req=$this->omnikassa_createRequest($Omniparams);
-   
+
     $OmnikassaParams['Data']=$req['data'];
     $OmnikassaParams['Seal']=$req['seal'];
     $OmnikassaParams['InterfaceVersion']='HP_1.0';
@@ -192,7 +196,7 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
   document.forms['omnikassa'].submit();
 </script>
 <?php
-   
+
   //      echo "Redirecting... please wait";
         require_once 'CRM/Core/Session.php';
         CRM_Core_Session::storeSessionObjects( );
@@ -273,8 +277,8 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
     $curr["NOK"]=array("nr" => 578, "fraction" => 2);
     $curr["SEK"]=array("nr" => 752, "fraction" => 2);
     $curr["DKK"]=array("nr" => 208, "fraction" => 2);
- 
-    $currency = isset($curr[$currency_code])?$curr[$currency_code]:$curr["EUR"];   
+
+    $currency = isset($curr[$currency_code])?$curr[$currency_code]:$curr["EUR"];
 
     return (array($currency["nr"], $currency["fraction"]==2?100:1));
   }
@@ -346,7 +350,7 @@ PRIMARY KEY (`id`)
      * @param string $data Data
      * @param string $seal Seal
      * @param bool $callback Is callback? (or redirect?)
-     * @return mixed Data-array bij succes, false bij ongeldige seal 
+     * @return mixed Data-array bij succes, false bij ongeldige seal
      */
 
     public function data_validate($data, $seal) {
@@ -357,7 +361,7 @@ PRIMARY KEY (`id`)
 
             return false;
         }
-        return true;   
+        return true;
 
     }
 
@@ -386,7 +390,7 @@ PRIMARY KEY (`id`)
             case 63: // beveiligingsprobleem gedetecteerd
             case 75: // aantal pogingen overschreden
                 break;
-    
+
             case 17: // betaling geannuleerd door klant
                 return "Je hebt de betaling geannuleerd. Probeer het opnieuw.";
                 break;
