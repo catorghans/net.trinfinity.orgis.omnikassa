@@ -107,7 +107,7 @@ articipantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
     $pp_id=0;
     if ($component == 'event') {
 //      $baseURL = 'civicrm/event/register';
-      $pp_id=$params['payment_processor'];
+      $pp_id=$params['payment_processor_id'];
       $returnURL = CRM_Utils_System::url($baseURL,array(
         'md' => $component,
         'qfKey' => $params['qfKey'],
