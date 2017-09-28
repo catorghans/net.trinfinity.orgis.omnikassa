@@ -1,5 +1,5 @@
 {
-  "name": "spnl/net.trinfinity.orgis.omnikassa",
+  "name": "catorg/net.trinfinity.orgis.omnikassa",
   "description": "Payment Processor for Rabobank Omnikassa",
   "type": "civicrm-module",
   "authors": [
