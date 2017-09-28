@@ -1,0 +1,12 @@
+{
+  "name": "spnl/net.trinfinity.orgis.omnikassa",
+  "description": "Payment Processor for Rabobank Omnikassa",
+  "type": "civicrm-module",
+  "authors": [
+    {
+      "name": "Hans Idink",
+      "email": "hidink@orgis.nl"
+    }
+  ],
+  "license": "AGPL-3.0"
+}

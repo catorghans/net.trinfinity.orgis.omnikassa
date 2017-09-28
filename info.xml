@@ -8,8 +8,8 @@
     <author>Hans Idink</author>
     <email>hidink@orgis.nl</email>
   </maintainer>
-  <releaseDate>2014-06-14</releaseDate>
-  <version>1.1</version>
+  <releaseDate>2017-09-12</releaseDate>
+  <version>1.1.1</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>4.4</ver>
@@ -20,7 +20,7 @@
   <civix>
     <namespace>CRM/Omnikassa</namespace>
   </civix>
-<urls>
+  <urls>
     <url desc="Main Extension Page">https://github.com/catorghans/net.trinfinity.orgis.omnikassa</url>
     <url desc="Documentation">https://github.com/catorghans/net.trinfinity.orgis.omnikassa</url>
     <url desc="Support">http://forum.civicrm.org</url>
